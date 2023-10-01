@@ -1,18 +1,28 @@
 {
   "name": "e-commerce-api-ud",
   "version": "1.0.0",
-  "description": "",
+  "description": "E-commerce API from Udemy course",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon server.js"
+    "start:dev": "nodemon server.js",
+    "start:prod": "NODE_ENV=production nodemon server.js"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": [
+    "e-commerce",
+    "api",
+    "udemy",
+    "nodejs",
+    "expressjs",
+    "mongodb",
+    "mongoose"
+  ],
+  "author": "Ali Samir",
   "license": "ISC",
   "dependencies": {
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
     "express-async-handler": "^1.2.0",
+    "express-validator": "^7.0.1",
     "mongoose": "^7.5.3",
     "morgan": "^1.10.0",
     "slugify": "^1.6.6"

@@ -9,6 +9,8 @@ dotenv.config({
 
 const dbConnection = require("./config/db");
 const categoryRoute = require("./routes/categoryRoute");
+const APIError = require("./utils/APIError");
+const globalError = require("./middlewares/errorMiddleware");
 
 dbConnection();
 
@@ -22,11 +24,36 @@ if (process.env.NODE_ENV === "development") {
   app.use(logger("dev"));
 }
 
-// Routes
+// Mount Routes
 app.use("/api/v1/categories", categoryRoute);
+app.all("*", (req, res, next) => {
+  next(new APIError(`Can't find ${req.originalUrl} on this server`, 400));
+});
+
+// Error Handler Middleware
+app.use(globalError);
 
 // Start the server
 const PORT = process.env.PORT || 8000;
-app.listen(PORT, () => {
+const server = app.listen(PORT, () => {
   console.log("Server is listening on port 8000");
+});
+
+// Events that can crash the node process
+// 1. Unhandled Rejection
+process.on("unhandledRejection", (err) => {
+  console.log("UNHANDLED REJECTION!\nShutting down...");
+  console.log(err.name, err.message);
+  server.close(() => {
+    process.exit(1);
+  });
+});
+
+// 2. Uncaught Exception
+process.on("uncaughtException", (err) => {
+  console.log("UNCAUGHT EXCEPTION!\nShutting down...");
+  console.log(err.name, err.message);
+  server.close(() => {
+    process.exit(1);
+  });
 });

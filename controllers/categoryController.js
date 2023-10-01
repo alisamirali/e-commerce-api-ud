@@ -2,11 +2,12 @@ const slugify = require("slugify");
 const asyncHandler = require("express-async-handler");
 
 const Category = require("../models/categoryModel");
+const APIError = require("../utils/APIError");
 
 // @desc    Get all categories
 // @route   GET /api/v1/categories
 // @access  Public
-const getCategories = asyncHandler(async (req, res) => {
+const getCategories = asyncHandler(async (req, res, next) => {
   const page = req.query.page * 1 || 1;
   const limit = req.query.limit * 1 || 5;
   const skip = (page - 1) * limit;
@@ -24,8 +25,7 @@ const getCategory = asyncHandler(async (req, res) => {
   const category = await Category.findById(id);
 
   if (!category) {
-    res.status(404);
-    throw new Error("Category not found");
+    return next(new APIError("Category not found", 404));
   }
 
   res.status(200).json({ data: category });
@@ -45,7 +45,7 @@ const createCategory = asyncHandler(async (req, res) => {
 // @desc    Update a category
 // @route   PUT /api/v1/categories/:id
 // @access  Private
-const updateCategory = asyncHandler(async (req, res) => {
+const updateCategory = asyncHandler(async (req, res, next) => {
   const { id } = req.params;
   const { name } = req.body;
 
@@ -56,8 +56,7 @@ const updateCategory = asyncHandler(async (req, res) => {
   );
 
   if (!category) {
-    res.status(404);
-    throw new Error("Category not found");
+    return next(new APIError("Category not found", 404));
   }
 
   res.status(200).json({ data: category });
@@ -66,19 +65,19 @@ const updateCategory = asyncHandler(async (req, res) => {
 // @desc    Delete a category
 // @route   DELETE /api/v1/categories/:id
 // @access  Private
-const deleteCategory = asyncHandler(async (req, res) => {
+const deleteCategory = asyncHandler(async (req, res, next) => {
   const { id } = req.params;
 
   const category = await Category.findOneAndDelete({ _id: id });
 
   if (!category) {
-    res.status(404);
-    throw new Error("Category not found");
+    return next(new APIError("Category not found", 404));
   }
 
   res.status(200).json({ data: null });
 });
 
+// Export all the methods
 module.exports = {
   getCategories,
   createCategory,
