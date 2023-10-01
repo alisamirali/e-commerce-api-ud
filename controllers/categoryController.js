@@ -20,7 +20,7 @@ const getCategories = asyncHandler(async (req, res, next) => {
 // @desc    Get a category
 // @route   GET /api/v1/categories/:slug
 // @access  Public
-const getCategory = asyncHandler(async (req, res) => {
+const getCategory = asyncHandler(async (req, res, next) => {
   const { id } = req.params;
   const category = await Category.findById(id);
 
