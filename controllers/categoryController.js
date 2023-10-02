@@ -9,7 +9,7 @@ const APIError = require("../utils/APIError");
 // @access  Public
 const getCategories = asyncHandler(async (req, res, next) => {
   const page = req.query.page * 1 || 1;
-  const limit = req.query.limit * 1 || 5;
+  const limit = req.query.limit * 1 || 10;
   const skip = (page - 1) * limit;
 
   const categories = await Category.find({}).skip(skip).limit(limit);
@@ -74,7 +74,7 @@ const deleteCategory = asyncHandler(async (req, res, next) => {
     return next(new APIError("Category not found", 404));
   }
 
-  res.status(200).json({ data: null });
+  res.status(200).json({ message: "Category deleted successfully" });
 });
 
 // Export all the methods

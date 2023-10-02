@@ -12,11 +12,16 @@ const {
   updateCategory,
   deleteCategory,
 } = require("../controllers/categoryController");
+const subCategoriesRoute = require("./subCategoryRoute");
 
 const router = express.Router();
 
+router.use("/:categoryId/subcategories", subCategoriesRoute);
+
+// Base route "/"
 router.route("/").get(getCategories).post(createCategory);
 
+// Routes with "/:id"
 router
   .route("/:id")
   .get(getCategoryValidator, getCategory)

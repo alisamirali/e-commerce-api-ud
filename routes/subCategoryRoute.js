@@ -6,21 +6,25 @@ const {
   getSubCategories,
   deleteSubCategory,
   updateSubCategory,
+  setCategoryIdToBody,
+  createFilterObject
 } = require("../controllers/subCategoryController");
+
 const {
   createSubCategoryValidator,
   getSubCategoryValidator,
   deleteSubCategoryValidator,
   updateSubCategoryValidator,
+  
 } = require("../utils/validators/subCategoryValidator");
 
-const router = express.Router();
+const router = express.Router({ mergeParams: true}); // mergeParams: true is used to access the categoryId in the subCategoryRoute.js
 
 // Base route "/"
 router
   .route("/")
-  .get(getSubCategories)
-  .post(createSubCategoryValidator, createSubCategory);
+  .post(setCategoryIdToBody, createSubCategoryValidator, createSubCategory)
+  .get(createFilterObject, getSubCategories)
 
 // Routes with "/:id"
 router
