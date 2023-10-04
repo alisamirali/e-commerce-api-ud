@@ -11,6 +11,7 @@ const dbConnection = require("./config/db");
 const categoryRoute = require("./routes/categoryRoute");
 const subCategoryRoute = require("./routes/subCategoryRoute");
 const brandsRoute = require("./routes/brandRoute");
+const productRoute = require("./routes/productRoute");
 const APIError = require("./utils/APIError");
 const globalError = require("./middlewares/errorMiddleware");
 
@@ -30,6 +31,7 @@ if (process.env.NODE_ENV === "development") {
 app.use("/api/v1/categories", categoryRoute);
 app.use("/api/v1/subcategories", subCategoryRoute);
 app.use("/api/v1/brands", brandsRoute);
+app.use("/api/v1/products", productRoute);
 
 app.all("*", (req, res, next) => {
   next(new APIError(`Can't find ${req.originalUrl} on this server`, 400));
